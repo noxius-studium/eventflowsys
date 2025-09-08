@@ -55,15 +55,14 @@ pip install eventflowsys
 
 ### LoggerInjectable (`logger_Injectable.py`)
 
-- **Purpose:** Abstract base class for logger injection, using loguru.
+- **Purpose:** Abstract base class for logger injection, using loguru by default. 
 - **Usage:**
-  ```python
-  from eventflowsys import LoggerInjectable
-  class MyService(LoggerInjectable):
-      def perform_action(self):
-          self.logger.info("Action performed!")
-  ```
-- **Custom logger:** Pass a custom logger or log path to the constructor.
+    ```python
+    from eventflowsys import LoggerInjectable
+    class MyService(LoggerInjectable):
+        def perform_action(self):
+            self.logger.info("Action performed!")
+    ```
 
 
 ### ThreadedServiceBus (`bus/thread_bus.py`)
@@ -325,6 +324,21 @@ pytest
 ```
 
 
+---
+
+## Planned Features
+
+The following features are **planned** and expected to be added in future releases:
+
+- **LoggerInjectable: Multi-Logger Support**
+    - Official support for additional loggers, including:
+        - Python standard library `logging.Logger`
+        - Sentry (`sentry_sdk`)
+        - structlog
+        - Logbook
+        - Graylog (e.g., `graypy`)
+        - Custom logger implementations
+- **Other planned features will be announced as the project evolves.**
 
 ---
 
@@ -376,3 +390,4 @@ Contributions are welcome! Please open issues or pull requests for bug fixes, ne
 ## License
 
 MIT License
+
