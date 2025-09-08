@@ -1,44 +1,59 @@
+
 # eventflowsys
 
 **eventflowsys** is a modern, extensible Python package for building robust event-driven systems. It provides both threaded and async event bus implementations, advanced subscription and messaging features, and a flexible logger injection base class. Designed for professional use, it follows SOLID principles and is suitable for a wide range of applications—from microservices to desktop apps.
 
 ---
 
+
 ## Key Features
 
-- **Threaded & Async Event Buses**: Choose between thread-safe (synchronous) and asyncio-based (asynchronous) event bus implementations.
-- **Group-based Subscriptions**: Organize services into named groups and deliver messages to targeted audiences.
-- **Priority & TTL Messaging**: Control message delivery order and expiration with priority and time-to-live support.
-- **Broadcast Support**: Instantly send messages to all groups.
-- **Event Hooks**: Register custom hooks for subscribe, unsubscribe, message delivery, and error events.
-- **Metrics & Tracking**: Monitor delivered, failed, pending, and expired messages. Query which services have not yet read a message.
-- **Custom Error Handling**: Built-in error classes for robust, granular error management.
-- **Logger Injection**: Abstract base class for dependency-injected loggers using loguru, supporting custom or default logging.
-- **SOLID Principles**: Clean, extensible, and maintainable architecture.
+- **Threaded & Async Event Buses**
+    Choose between thread-safe (synchronous) and asyncio-based (asynchronous) event bus implementations.
+- **Group-based Subscriptions**
+    Organize services into named groups and deliver messages to targeted audiences.
+- **Priority & TTL Messaging**
+    Control message delivery order and expiration with priority and time-to-live support.
+- **Broadcast Support**
+    Instantly send messages to all groups.
+- **Event Hooks**
+    Register custom hooks for subscribe, unsubscribe, message delivery, and error events.
+- **Metrics & Tracking**
+    Monitor delivered, failed, pending, and expired messages. Query which services have not yet read a message.
+- **Custom Error Handling**
+    Built-in error classes for robust, granular error management.
+- **Logger Injection**
+    Abstract base class for dependency-injected loggers using loguru, supporting custom or default logging.
+- **SOLID Principles**
+    Clean, extensible, and maintainable architecture.
 
-<br>
-<br>
+---
 
 
 ---
 
 ---
 
-# eventflowsys – Documentation
+
+# Documentation
 
 ---
+
 
 ## Installation
 
-```
+```bash
 pip install eventflowsys
 ```
 
 ---
 
+---
+
+
 ## Modules & Classes
 
-### 1. LoggerInjectable (logger_Injectable.py)
+### LoggerInjectable (`logger_Injectable.py`)
 
 - **Purpose:** Abstract base class for logger injection, using loguru.
 - **Usage:**
@@ -50,7 +65,8 @@ pip install eventflowsys
   ```
 - **Custom logger:** Pass a custom logger or log path to the constructor.
 
-### 2. ThreadedServiceBus (bus/thread_bus.py)
+
+### ThreadedServiceBus (`bus/thread_bus.py`)
 
 - **Purpose:** Thread-safe event bus for synchronous applications.
 - **Key Methods:**
@@ -68,7 +84,8 @@ pip install eventflowsys
   - Metrics & unread tracking
   - Event hooks for extensibility
 
-### 3. AsyncServiceBus (bus/async_bus.py)
+
+### AsyncServiceBus (`bus/async_bus.py`)
 
 - **Purpose:** Asyncio-based event bus for coroutine-based applications.
 - **Key Methods:**
@@ -86,16 +103,21 @@ pip install eventflowsys
   - Metrics & unread tracking
   - Event hooks for extensibility
 
-### 4. Base Interfaces & Errors (bus/base_bus.py)
+
+### Base Interfaces & Errors (`bus/base_bus.py`)
 
 - **IServiceBus:** Abstract base class for event bus implementations.
 - **Message:** Data class for messages (priority, group, data, expiration).
 - **Custom Errors:**
   - `ServiceBusError`, `SubscriptionError`, `MessageNotFoundError`, `GroupNotFoundError`
 
+
 ---
 
-## Example: Threaded Bus
+
+## Quick Start Examples
+
+### Threaded Bus
 
 ```python
 from eventflowsys import ThreadedServiceBus
@@ -106,7 +128,8 @@ bus.subscribe("group1", "serviceA", callback)
 bus.publish("group1", "hello world")
 ```
 
-## Example: Async Bus
+
+### Async Bus
 
 ```python
 from eventflowsys import AsyncServiceBus
@@ -120,7 +143,8 @@ async def main():
 asyncio.run(main())
 ```
 
-## Example: LoggerInjectable
+
+### LoggerInjectable
 
 ```python
 from eventflowsys import LoggerInjectable
@@ -131,9 +155,12 @@ service = MyService()
 service.perform_action()
 ```
 
+
 ---
 
-## Advanced Usage Examples
+
+## Advanced Usage
+
 
 ### Custom Event Hooks
 
@@ -151,6 +178,7 @@ bus.subscribe("group1", "svc", lambda i, d: None)
 bus.publish("group1", "test")
 ```
 
+
 ### Custom Error Handling
 
 Handle errors gracefully by registering an error hook:
@@ -165,7 +193,8 @@ except Exception:
     pass
 ```
 
-### Integration Scenario: LoggerInjectable with Event Bus
+
+### Integration: LoggerInjectable with Event Bus
 
 Inject a logger into a service that subscribes to the bus:
 
@@ -178,7 +207,11 @@ bus.subscribe("group1", "svc", service.perform_action)
 bus.publish("group1", "integrated logging!")
 ```
 
+
+---
+
 ## Architecture & Flow Diagrams
+
 
 ### Event Flow (Threaded/Async Bus)
 
@@ -189,6 +222,7 @@ flowchart TD
     B -- Deliver --> S2[Subscriber 2]
     B -- Metrics/Error/Hook --> H[Hooks]
 ```
+
 
 ### Bus Architecture Overview
 
@@ -216,22 +250,26 @@ classDiagram
     AsyncServiceBus : metrics
 ```
 
+
 ### Logger Injection Flow
 
 ```mermaid
 flowchart TD
-    S[Service (LoggerInjectable)] -- uses --> L[Logger (loguru)]
-    S -- logs to --> F[File/Console]
+    S["Service (LoggerInjectable)"] -->|"uses"| L["Logger (loguru)"]
+    S -->|"logs to"| F["File/Console"]
 ```
+
 
 ---
 
+
 ## API Reference Tables
+
 
 ### ThreadedServiceBus & AsyncServiceBus
 
 | Method              | Parameters                                                                                     | Return Type      | Description                                            |
-| ------------------- | ---------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------ |
+|---------------------|------------------------------------------------------------------------------------------------|------------------|--------------------------------------------------------|
 | subscribe           | group: str, service_name: str, callback: Callable                                              | None             | Subscribe a service to a group.                        |
 | unsubscribe         | group: str, service_name: str                                                                  | None             | Unsubscribe a service from a group.                    |
 | publish             | group: str, data: Any, priority: int = 0, ttl: Optional[float] = None, broadcast: bool = False | int or list[int] | Publish a message to a group or all groups.            |
@@ -243,35 +281,40 @@ flowchart TD
 | set_on_error        | hook: Callable                                                                                 | None             | Register a hook for error events.                      |
 | get_metrics         |                                                                                                | dict             | Get bus metrics (delivered, failed, pending, expired). |
 
+
 ### LoggerInjectable
 
 | Method         | Parameters                           | Return Type | Description                                         |
-| -------------- | ------------------------------------ | ----------- | --------------------------------------------------- |
-| **init**       | logger: Optional, log_path: Optional | None        | Initialize with optional custom logger or log path. |
+|----------------|--------------------------------------|-------------|-----------------------------------------------------|
+| __init__       | logger: Optional, log_path: Optional | None        | Initialize with optional custom logger or log path. |
 | perform_action |                                      | None        | Abstract method to be implemented by subclasses.    |
 
-### Message (bus/base_bus.py)
+
+### Message (`bus/base_bus.py`)
 
 | Attribute  | Type          | Description                                |
-| ---------- | ------------- | ------------------------------------------ |
+|------------|--------------|--------------------------------------------|
 | priority   | int           | Message priority (lower = higher priority) |
 | msg_id     | int           | Unique message identifier                  |
 | group      | str           | Target group                               |
 | data       | Any           | Message payload                            |
 | expiration | float or None | Expiration timestamp                       |
 
+
 ### Custom Errors
 
 | Error Class          | Description                         |
-| -------------------- | ----------------------------------- |
+|----------------------|-------------------------------------|
 | ServiceBusError      | Base exception for bus errors       |
 | SubscriptionError    | Raised for subscription problems    |
 | MessageNotFoundError | Raised if a message ID is not found |
 | GroupNotFoundError   | Raised if a group does not exist    |
 
+
 ---
 
 ---
+
 
 ## Testing
 
@@ -282,18 +325,14 @@ pytest
 ```
 
 
-<br>
-<br>
 
 ---
----
 
-# eventflowsys – Unplanned & Possible Future Features
----
+## Unplanned & Possible Future Features
 
-This document lists **possible, uncommitted ideas** for the future of eventflowsys. These are not planned or promised features—just a collection of creative directions the project could take. Community feedback and real-world needs will shape what (if any) get built.
+This section lists **possible, uncommitted ideas** for the future of eventflowsys. These are not planned or promised features—just a collection of creative directions the project could take. Community feedback and real-world needs will shape what (if any) get built.
 
-## Unplanned Ideas & Possibilities
+### Unplanned Ideas & Possibilities
 
 - **Event Persistence & Replay**: Persist messages to disk or database and replay them for new subscribers or debugging.
 - **Dead Letter Queue**: Automatically move undeliverable messages to a dead letter queue for inspection or reprocessing.
@@ -327,8 +366,6 @@ This document lists **possible, uncommitted ideas** for the future of eventflows
 *This is a living list of ideas, not a roadmap. Suggestions welcome!*
 
 ---
----
-<br>
 
 ## Contributing
 
